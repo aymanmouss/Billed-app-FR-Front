@@ -3,10 +3,13 @@
  */
 
 import { screen, waitFor } from "@testing-library/dom";
+import userEvent from "@testing-library/user-event";
 import BillsUI from "../views/BillsUI.js";
+import Bills from "../containers/Bills.js";
 import { bills } from "../fixtures/bills.js";
-import { ROUTES_PATH } from "../constants/routes.js";
+import { ROUTES_PATH, ROUTES } from "../constants/routes.js";
 import { localStorageMock } from "../__mocks__/localStorage.js";
+import mockStore from "../__mocks__/store";
 
 import router from "../app/Router.js";
 
@@ -29,7 +32,9 @@ describe("Given I am connected as an employee", () => {
       window.onNavigate(ROUTES_PATH.Bills);
       await waitFor(() => screen.getByTestId("icon-window"));
       const windowIcon = screen.getByTestId("icon-window");
+      /**********[Ajout de tests unitaires et d'intégration] **********/
       //to-do write expect expression
+      expect(windowIcon.className).toBe("active-icon");
     });
     /***************************** [Bug report] - Bills ***********************************/
     // To ensure that the test is passed, the bills list has been sorted in BilssUI.
@@ -44,5 +49,70 @@ describe("Given I am connected as an employee", () => {
       const datesSorted = [...dates].sort(antiChrono);
       expect(dates).toEqual(datesSorted);
     });
+    test("Then we we click on 'eye' icon it should display the file in a modal", () => {
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname });
+      };
+      Object.defineProperty(window, "localStorage", {
+        value: localStorageMock,
+      });
+      // we are connected as employee
+      window.localStorage.setItem(
+        "user",
+        JSON.stringify({
+          type: "Employee",
+        })
+      );
+      // we initiate the Bills UI and test the event onClick the eay icon
+      document.body.innerHTML = BillsUI({ data: bills });
+      new Bills({ document, onNavigate, localStorage: window.localStorage });
+      // we mocke the the jQuery modal plugin to simulate the function
+      jQuery.fn.modal = jest.fn();
+      const eyeIcon = screen.getAllByTestId("icon-eye")[0];
+      userEvent.click(eyeIcon);
+      expect(jQuery.fn.modal).toHaveBeenCalledWith("show");
+    });
+    // new bill btn test
+    test("Then when we click on new bill button we should navigate to new bill page", () => {
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname });
+      };
+      window.localStorage.setItem(
+        "user",
+        JSON.stringify({
+          type: "Employee",
+        })
+      );
+      new Bills({ document, onNavigate, localStorage: window.localStorage });
+      const newBillBtn = screen.getByTestId("btn-new-bill");
+      userEvent.click(newBillBtn);
+      expect(screen.getByText("Envoyer une note de frais")).toBeTruthy;
+      expect(screen.queryByTestId("form-new-bill")).toBeTruthy();
+    });
+  });
+});
+describe("fetching data form api", () => {
+  it("should retrieve bills ", async () => {
+    // we initiate a new bills
+    const bills = new Bills({
+      store: mockStore,
+      document,
+    });
+    expect(await bills.getBills()).toHaveLength(4);
+  });
+  it("should retrieve bills ", async () => {
+    Object.defineProperty(window, "localStorage", {
+      value: localStorageMock,
+    });
+    const root = document.createElement("div");
+    root.setAttribute("id", "root");
+    document.body.append(root);
+    router();
+    // we initiate a new bills
+    const bills = new Bills({
+      store: null,
+      document,
+    });
+    expect(await bills.getBills()).toBe(undefined);
   });
 });
