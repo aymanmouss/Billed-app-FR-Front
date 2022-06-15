@@ -53,9 +53,9 @@ export default () => {
                     <textarea class="form-control blue-border" data-testid="commentary" rows="3"></textarea>
                   </div>
                   <div class="col-half">
-                    <label for="file" class="bold-label">Justificatif</label>
-                    <input required type="file" class="form-control blue-border" data-testid="file" />
-                    <p class='erm hiden'>The file extension must be a jpg, png or jpg</p>
+                    <label for="files" class="bold-label">Justificatif</label>
+                    <input id='files' required type="file" class="form-control blue-border" data-testid="file" />
+                    <p class='erm hiden' data-testid="errFile">The file extension must be a jpg, png or jpg</p>
                   </div>
                 </div>
             </div>

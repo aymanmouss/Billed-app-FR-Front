@@ -39,8 +39,11 @@ export default class NewBill {
       fileExtension !== "jpeg" &&
       fileExtension !== "png"
     ) {
+      this.filetype = true;
+      console.log(this.filetype);
       errMessage.classList.remove("hiden");
     } else {
+      this.filetype = false;
       errMessage.classList.add("hiden");
       this.store
         .bills()
@@ -63,9 +66,11 @@ export default class NewBill {
     e.preventDefault();
     //***************************** [Bug Hunt] - Bills ***********************************
     // we crated an Alert in case we didn't change the file
-    if (this.filetype === false) {
+    if (this.filetype === true) {
       e.preventDefault();
-      alert("the file is not a jpg or png");
+      alert(
+        "The file extension is not correct, please add  a jpg, png or jpeg file instead"
+      );
     } else {
       e.preventDefault();
       console.log(
