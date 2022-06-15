@@ -66,42 +66,44 @@ export default class NewBill {
     e.preventDefault();
     //***************************** [Bug Hunt] - Bills ***********************************
     // we crated an Alert in case we didn't change the file
-    if (this.filetype === true) {
-      e.preventDefault();
-      alert(
-        "The file extension is not correct, please add  a jpg, png or jpeg file instead"
-      );
-    } else {
-      e.preventDefault();
-      console.log(
-        'e.target.querySelector(`input[data-testid="datepicker"]`).value',
-        e.target.querySelector(`input[data-testid="datepicker"]`).value
-      );
-      const email = JSON.parse(localStorage.getItem("user")).email;
-      const bill = {
-        email,
-        type: e.target.querySelector(`select[data-testid="expense-type"]`)
-          .value,
-        name: e.target.querySelector(`input[data-testid="expense-name"]`).value,
-        amount: parseInt(
-          e.target.querySelector(`input[data-testid="amount"]`).value
-        ),
-        date: e.target.querySelector(`input[data-testid="datepicker"]`).value,
-        vat: e.target.querySelector(`input[data-testid="vat"]`).value,
-        pct:
-          parseInt(e.target.querySelector(`input[data-testid="pct"]`).value) ||
-          20,
-        commentary: e.target.querySelector(`textarea[data-testid="commentary"]`)
-          .value,
-        fileUrl: this.fileUrl,
-        fileName: this.fileName,
-        status: "pending",
-      };
-      console.log(this.updateBill(bill));
-      console.log(this.updateBill(bill));
-      this.updateBill(bill);
-      this.onNavigate(ROUTES_PATH["Bills"]);
-    }
+    // if (
+    //   fileExtension !== "jpg" &&
+    //   fileExtension !== "jpeg" &&
+    //   fileExtension !== "png"
+    // ) {
+    //   e.preventDefault();
+    //   alert(
+    //     "The file extension is not correct, please add  a jpg, png or jpeg file instead"
+    //   );
+    // } else {
+    e.preventDefault();
+    console.log(
+      'e.target.querySelector(`input[data-testid="datepicker"]`).value',
+      e.target.querySelector(`input[data-testid="datepicker"]`).value
+    );
+    const email = JSON.parse(localStorage.getItem("user")).email;
+    const bill = {
+      email,
+      type: e.target.querySelector(`select[data-testid="expense-type"]`).value,
+      name: e.target.querySelector(`input[data-testid="expense-name"]`).value,
+      amount: parseInt(
+        e.target.querySelector(`input[data-testid="amount"]`).value
+      ),
+      date: e.target.querySelector(`input[data-testid="datepicker"]`).value,
+      vat: e.target.querySelector(`input[data-testid="vat"]`).value,
+      pct:
+        parseInt(e.target.querySelector(`input[data-testid="pct"]`).value) ||
+        20,
+      commentary: e.target.querySelector(`textarea[data-testid="commentary"]`)
+        .value,
+      fileUrl: this.fileUrl,
+      fileName: this.fileName,
+      status: "pending",
+    };
+    console.log(this.updateBill(bill));
+    console.log(this.updateBill(bill));
+    this.updateBill(bill);
+    this.onNavigate(ROUTES_PATH["Bills"]);
   };
 
   // not need to cover this function by tests
