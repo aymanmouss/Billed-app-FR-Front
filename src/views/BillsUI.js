@@ -51,11 +51,16 @@ export default ({ data: bills, loading, error }) => {
   /***************************** [Bug report] - Bills ***********************************/
   // The bills list has been sorted by date
 
+  // if (bills) {
+  //   decSortedBills = [...bills].sort(
+  //     (a, b) => new Date(b.date) - new Date(a.date)
+  //   );
+  // }
   if (bills) {
-    decSortedBills = [...bills].sort(
-      (a, b) => new Date(b.date) - new Date(a.date)
-    );
+    const antiChrono = (a, b) => (new Date(a.date) < new Date(b.date) ? 1 : -1);
+    decSortedBills = bills.sort(antiChrono);
   }
+
   return `
     <div class='layout'>
       ${VerticalLayout(120)}

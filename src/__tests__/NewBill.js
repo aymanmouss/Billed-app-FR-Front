@@ -127,8 +127,6 @@ describe("Given I am connected as an employee", () => {
       // document.location = "/#employee/bill/new";
       fireEvent.change(screen.getByTestId("file"), "file.pdf");
       expect(getByTestId(document.body, "errFile")).not.toHaveClass("hiden");
-
-      userEvent.click(screen.getByText("Envoyer"));
     });
 
     it(" Should display an error message when the file extension is not correct", () => {
